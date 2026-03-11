@@ -1,4 +1,4 @@
-# Memoria: AI-First Spaced Repetition Platform
+# Memoria: AI-First Next-Gen Scientific Learning Platform
 
 ![Memoria Banner](./.github/assets/banner.png)
 
