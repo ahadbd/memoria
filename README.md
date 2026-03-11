@@ -73,13 +73,14 @@ To build the most efficient learning engine on the planet, removing the friction
    ```
 
 3. **Environment Setup**
-   Create a `.env` file in the root directory:
-   ```env
-   DATABASE_URL="postgresql://..."
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
-   CLERK_SECRET_KEY="sk_test_..."
-   GEMINI_API_KEY="AIza..."
-   ```
+   Create a `.env` file in the root directory. You can use the following table as a reference for required keys:
+
+| Variable | Description | Source |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | PostgreSQL connection string | Supabase / local Postgres |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Frontend API key | [Clerk Dashboard](https://dashboard.clerk.com) |
+| `CLERK_SECRET_KEY` | Clerk Backend API key | [Clerk Dashboard](https://dashboard.clerk.com) |
+| `GEMINI_API_KEY` | Google Gemini API key | [Google AI Studio](https://aistudio.google.com/) |
 
 4. **Database Migration**
    ```bash
@@ -117,5 +118,26 @@ Memoria is just getting started. Here’s what we’re planning for the future:
 - `lib/`: Core logic, FSRS implementation, and AI actions.
 - `prisma/`: Database schema and migrations.
 
+## 🚀 Deployment
+
+The easiest way to deploy Memoria is via the [Vercel Platform](https://vercel.com/new).
+
+1. **Database**: Provision a PostgreSQL instance (Supabase is recommended).
+2. **Environment**: Add all variables from the `.env` table to your Vercel project settings.
+3. **Build**: Vercel will automatically detect Next.js and run the build script.
+
+## 🤝 Contributing
+
+We welcome contributions! 
+
+1. **Fork** the repository.
+2. **Create** a new feature branch (`git checkout -b feature/AmazingFeature`).
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`).
+4. **Push** to the branch (`git push origin feature/AmazingFeature`).
+5. **Open** a Pull Request.
+
 ## 📜 License
 MIT License. Built with ❤️ for the future of learning.
+
+## 📬 Contact
+Project Link: [https://github.com/ahadbd/memoria](https://github.com/ahadbd/memoria)
