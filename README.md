@@ -120,11 +120,26 @@ Memoria is just getting started. Here’s what we’re planning for the future:
 
 ## 🚀 Deployment
 
-The easiest way to deploy Memoria is via the [Vercel Platform](https://vercel.com/new).
+Memoria is optimized for deployment on the [Vercel Platform](https://vercel.com/new).
 
-1. **Database**: Provision a PostgreSQL instance (Supabase is recommended).
-2. **Environment**: Add all variables from the `.env` table to your Vercel project settings.
-3. **Build**: Vercel will automatically detect Next.js and run the build script.
+### 1. Connect to GitHub
+- Select the `memoria` repository in the Vercel dashboard.
+- Ensure the Framework Preset is set to **Next.js**.
+
+### 2. Environment Variables
+Add the following keys in the "Environment Variables" section during setup:
+
+| Key | Description |
+| :--- | :--- |
+| `DATABASE_URL` | Your production PostgreSQL connection string. |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Your Clerk Publishable Key. |
+| `CLERK_SECRET_KEY` | Your Clerk Secret Key. |
+| `GEMINI_API_KEY` | Your Google Gemini API Key. |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `/sign-in` |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/sign-up` |
+
+### 3. Build & Launch
+Click **Deploy**. Vercel will trigger a production build, run the Prisma post-install generation, and provide your live application URL.
 
 ## 🤝 Contributing
 
