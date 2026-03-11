@@ -1,6 +1,6 @@
 # Memoria: AI-First Spaced Repetition Platform
 
-![Memoria Banner](https://images.unsplash.com/photo-1620712943543-bcc4628c6e3d?q=80&w=2000&auto=format&fit=crop)
+![Memoria Banner](public/assets/banner.png)
 
 Memoria is a high-performance, AI-driven study platform designed for the "agentic era." It combines the power of **Google Gemini 1.5 Flash** for automated content generation with the scientific precision of the **FSRS (Free Spaced Repetition Scheduler)** algorithm to optimize long-term memory retention.
 
