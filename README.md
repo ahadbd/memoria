@@ -91,6 +91,26 @@ To build the most efficient learning engine on the planet, removing the friction
    npm run dev
    ```
 
+## 🔮 Roadmap & Future Scope
+
+Memoria is just getting started. Here’s what we’re planning for the future:
+
+### 1. Advanced AI Capabilities
+- **Multimedia Generation**: Support for generating cards from YouTube videos, local audio files, and handwriting recognition (OCR).
+- **AI Tutors**: Personalized AI chatbots that can explain concepts you’re struggling with based on your FSRS history.
+
+### 2. Social & Collaborative Learning
+- **Deck Marketplace**: A community hub to share, rate, and clone high-quality study sets.
+- **Study Groups**: Real-time collaborative sessions with synchronized flashcard reviews.
+
+### 3. Cross-Platform Experience
+- **Mobile App**: Dedicated iOS and Android applications built with React Native.
+- **Offline Mode**: Local-first sync capability to study anywhere without an internet connection.
+
+### 4. Advanced Analytics
+- **Projected Mastery**: Better visualization for when you will reach "Mastery" of a subject based on your current stability.
+- **Heatmaps**: GitHub-style contribution heatmaps for study consistency.
+
 ## 🏗 Architecture
 - `app/`: Next.js App Router pages and API routes.
 - `components/`: Reusable UI components (shadcn/ui based).
