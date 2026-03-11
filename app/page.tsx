@@ -56,7 +56,7 @@ export default function Home() {
             )}
             {isLoaded && isSignedIn && (
               <>
-                <Link href="/admin" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4">Dashboard</Link>
+                <Link href="/dashboard" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4">Dashboard</Link>
                 <UserButton />
               </>
             )}
@@ -90,7 +90,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link href={isSignedIn ? "/admin" : "/sign-up"}>
+              <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
                 <Button size="lg" className="rounded-full px-10 h-16 text-xl font-black group shadow-[0_0_30px_rgba(99,102,241,0.3)]">
                   {isSignedIn ? "Go to Dashboard" : "Start Learning Now"}
                   <ChevronRight className="ml-2 w-6 h-6 transition-transform group-hover:translate-x-1" />
@@ -293,7 +293,7 @@ export default function Home() {
                 <p className="text-xl text-white/80 font-medium max-w-xl mx-auto">
                    Join the thousands of students, researchers, and polymaths building a permanent knowledge base with Memoria.
                 </p>
-                <Link href={isSignedIn ? "/admin" : "/sign-up"}>
+                <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
                   <Button size="lg" variant="outline" className="rounded-full px-12 h-16 text-xl font-black bg-white text-indigo-600 border-none hover:bg-slate-100 shadow-xl transition-all hover:scale-105">
                      {isSignedIn ? "OPEN DASHBOARD" : "GET STARTED FOR FREE"}
                   </Button>
