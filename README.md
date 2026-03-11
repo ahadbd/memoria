@@ -8,19 +8,19 @@ Memoria is a high-performance, AI-driven study platform designed for the "agenti
 
 ### Interactive Hero & Landing Page
 The landing page features high-impact typography and smooth animations to communicate the platform's value immediately.
-![Professional Hero Section](file:///C:/Users/bangl/.gemini/antigravity/brain/ab3423a5-099e-4330-85d4-a5c89ef7869f/hero_section_verification_1773269011340.png)
+![Professional Hero Section](public/assets/hero-section.png)
 
 ### AI-Powered Preview Systems
 The feature showcase includes animated mock UI components demonstrating the AI generation and scientific intervals.
-![AI & FSRS Previews](file:///C:/Users/bangl/.gemini/antigravity/brain/ab3423a5-099e-4330-85d4-a5c89ef7869f/previews_verification_1773269820297.png)
+![AI & FSRS Previews](public/assets/feature-previews.png)
 
 ### Authentication Flow
 Seamless integration with Clerk for secure, role-based access.
-![Clerk Sign-Up](file:///C:/Users/bangl/.gemini/antigravity/brain/ab3423a5-099e-4330-85d4-a5c89ef7869f/clerk_sign_up_page_1773269599596.png)
+![Clerk Sign-Up](public/assets/auth-flow.png)
 
 ### Full Technical Walkthrough
 Watch the complete functional verification of the platform's features and navigation.
-![Verification Recording](file:///C:/Users/bangl/.gemini/antigravity/brain/ab3423a5-099e-4330-85d4-a5c89ef7869f/interactive_previews_verification_detailed_1773269798447.webp)
+![Verification Recording](public/assets/verification-walkthrough.webp)
 
 ## 🚀 Vision
 To build the most efficient learning engine on the planet, removing the friction of manual deck creation and providing a scientifically-backed study schedule that adapts to every user's unique memory profile.
