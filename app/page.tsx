@@ -4,6 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { 
+  UserButton,
+  useUser
+} from "@clerk/nextjs";
+import { 
   Sparkles, 
   Zap, 
   Brain, 
@@ -20,6 +24,8 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+  const { isSignedIn, isLoaded } = useUser();
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden selection:bg-indigo-500/30">
       {/* Dynamic Background */}
@@ -40,10 +46,20 @@ export default function Home() {
             <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/sign-in" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4">Log in</Link>
-            <Link href="/sign-up">
-              <Button size="sm" className="rounded-full px-5 font-bold">Try for free</Button>
-            </Link>
+            {isLoaded && !isSignedIn && (
+              <>
+                <Link href="/sign-in" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4">Log in</Link>
+                <Link href="/sign-up">
+                  <Button size="sm" className="rounded-full px-5 font-bold">Try for free</Button>
+                </Link>
+              </>
+            )}
+            {isLoaded && isSignedIn && (
+              <>
+                <Link href="/admin" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors px-4">Dashboard</Link>
+                <UserButton />
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -74,9 +90,9 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link href="/sign-up">
+              <Link href={isSignedIn ? "/admin" : "/sign-up"}>
                 <Button size="lg" className="rounded-full px-10 h-16 text-xl font-black group shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-                  Start Learning Now
+                  {isSignedIn ? "Go to Dashboard" : "Start Learning Now"}
                   <ChevronRight className="ml-2 w-6 h-6 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -277,9 +293,9 @@ export default function Home() {
                 <p className="text-xl text-white/80 font-medium max-w-xl mx-auto">
                    Join the thousands of students, researchers, and polymaths building a permanent knowledge base with Memoria.
                 </p>
-                <Link href="/sign-up">
+                <Link href={isSignedIn ? "/admin" : "/sign-up"}>
                   <Button size="lg" variant="outline" className="rounded-full px-12 h-16 text-xl font-black bg-white text-indigo-600 border-none hover:bg-slate-100 shadow-xl transition-all hover:scale-105">
-                     GET STARTED FOR FREE
+                     {isSignedIn ? "OPEN DASHBOARD" : "GET STARTED FOR FREE"}
                   </Button>
                 </Link>
                 <p className="text-sm font-bold text-white/60 uppercase tracking-widest flex items-center justify-center gap-2">
