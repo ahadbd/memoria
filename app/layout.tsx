@@ -23,7 +23,7 @@ export default function RootLayout({
         variables: { primaryColor: "#6366f1" },
       }}
     >
-      <html lang="en" className="dark">
+      <html lang="en" className="dark" suppressHydrationWarning>
         <body className={`${inter.className} bg-slate-950 text-slate-50 antialiased`}>
           {children}
         </body>
