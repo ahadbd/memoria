@@ -1,6 +1,6 @@
 # Memoria: AI-First Spaced Repetition Platform
 
-![Memoria Banner](public/assets/banner.png)
+![Memoria Banner](./.github/assets/banner.png)
 
 Memoria is a high-performance, AI-driven study platform designed for the "agentic era." It combines the power of **Google Gemini 1.5 Flash** for automated content generation with the scientific precision of the **FSRS (Free Spaced Repetition Scheduler)** algorithm to optimize long-term memory retention.
 
@@ -8,19 +8,19 @@ Memoria is a high-performance, AI-driven study platform designed for the "agenti
 
 ### Interactive Hero & Landing Page
 The landing page features high-impact typography and smooth animations to communicate the platform's value immediately.
-![Professional Hero Section](public/assets/hero-section.png)
+![Professional Hero Section](./.github/assets/hero-section.png)
 
 ### AI-Powered Preview Systems
 The feature showcase includes animated mock UI components demonstrating the AI generation and scientific intervals.
-![AI & FSRS Previews](public/assets/feature-previews.png)
+![AI & FSRS Previews](./.github/assets/feature-previews.png)
 
 ### Authentication Flow
 Seamless integration with Clerk for secure, role-based access.
-![Clerk Sign-Up](public/assets/auth-flow.png)
+![Clerk Sign-Up](./.github/assets/auth-flow.png)
 
 ### Full Technical Walkthrough
 Watch the complete functional verification of the platform's features and navigation.
-![Verification Recording](public/assets/verification-walkthrough.webp)
+![Verification Recording](./.github/assets/verification-walkthrough.webp)
 
 ## 🚀 Vision
 To build the most efficient learning engine on the planet, removing the friction of manual deck creation and providing a scientifically-backed study schedule that adapts to every user's unique memory profile.
