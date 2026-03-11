@@ -5,13 +5,17 @@ import { Plus, Trash2, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { createDeck } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 export default function DeckBuilder() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [cards, setCards] = useState([{ front: "", back: "" }]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [magicContent, setMagicContent] = useState("");
+  const router = useRouter();
 
   const addCard = () => {
     setCards([...cards, { front: "", back: "" }]);
@@ -31,7 +35,6 @@ export default function DeckBuilder() {
     if (!magicContent) return;
     setIsGenerating(true);
     try {
-      // API call placeholder for generation
       const response = await fetch("/api/generate", {
         method: "POST",
         body: JSON.stringify({ content: magicContent }),
@@ -45,6 +48,20 @@ export default function DeckBuilder() {
     } finally {
       setIsGenerating(false);
       setMagicContent("");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!title || cards.length === 0) return;
+    setIsSaving(true);
+    try {
+      await createDeck(title, description, cards);
+      router.push("/dashboard");
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to save deck:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -140,8 +157,18 @@ export default function DeckBuilder() {
       </div>
 
       <div className="pt-8 border-t border-slate-800 flex justify-end">
-        <Button size="lg" className="px-12 font-bold">
-          Save Deck
+        <Button 
+          size="lg" 
+          className="px-12 font-bold"
+          onClick={handleSave}
+          disabled={isSaving || !title || cards.length === 0}
+        >
+          {isSaving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : "Save Deck"}
         </Button>
       </div>
     </div>

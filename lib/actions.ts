@@ -60,3 +60,67 @@ export async function updateStreak(userId: string) {
     });
   }
 }
+
+export async function createDeck(title: string, description: string, cards: { front: string, back: string }[]) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorized");
+
+  const dbUser = await prisma.user.findUnique({ where: { clerkId } });
+  if (!dbUser) throw new Error("User not found");
+
+  return await prisma.$transaction(async (tx) => {
+    const deck = await tx.deck.create({
+      data: {
+        title,
+        description,
+        userId: dbUser.id,
+        cards: {
+          create: cards.map(card => ({
+            front: card.front,
+            back: card.back,
+            nextReview: new Date(),
+          }))
+        }
+      }
+    });
+    return deck;
+  });
+}
+
+export async function saveReviewResults(results: { cardId: string, rating: number, nextState: any }[]) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorized");
+
+  const dbUser = await prisma.user.findUnique({ where: { clerkId } });
+  if (!dbUser) throw new Error("User not found");
+
+  return await prisma.$transaction(async (tx) => {
+    for (const result of results) {
+      await tx.card.update({
+        where: { id: result.cardId },
+        data: {
+          stability: result.nextState.stability,
+          difficulty: result.nextState.difficulty,
+          elapsedDays: result.nextState.elapsedDays,
+          scheduledDays: result.nextState.scheduledDays,
+          reps: result.nextState.reps,
+          lapses: result.nextState.lapses,
+          state: result.nextState.state,
+          lastReview: result.nextState.lastReview,
+          nextReview: result.nextState.nextReview,
+        }
+      });
+
+      await tx.review.create({
+        data: {
+          cardId: result.cardId,
+          userId: dbUser.id,
+          rating: result.rating,
+        }
+      });
+    }
+
+    // Update streak if it's been a new day
+    await updateStreak(dbUser.id);
+  });
+}
