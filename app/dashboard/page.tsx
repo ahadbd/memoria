@@ -5,6 +5,7 @@ import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { syncUser } from "@/lib/actions";
 
 export default async function Dashboard() {
   const { userId: clerkId } = await auth();
@@ -12,7 +13,7 @@ export default async function Dashboard() {
     redirect("/sign-in");
   }
 
-  const dbUser = await prisma.user.findUnique({
+  let dbUser = await prisma.user.findUnique({
     where: { clerkId },
     include: {
       decks: {
@@ -36,7 +37,8 @@ export default async function Dashboard() {
   });
 
   if (!dbUser) {
-    redirect("/sign-in");
+    dbUser = await syncUser() as any;
+    if (!dbUser) redirect("/sign-in");
   }
 
   const decks = dbUser.decks.map(deck => ({
