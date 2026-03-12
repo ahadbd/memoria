@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Flame, Star, Trophy, Target } from "lucide-react";
+import { Flame, Trophy } from "lucide-react";
 
 export function GamificationOverlay({ streak, xp }: { streak: number, xp: number }) {
   return (

@@ -1,6 +1,9 @@
 import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { LayoutDashboard, Library, Users, ShieldAlert, Settings } from "lucide-react";
 import Link from "next/link";
+import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 const sidebarItems = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -10,11 +13,17 @@ const sidebarItems = [
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) redirect("/sign-in");
+
+  const user = await prisma.user.findUnique({ where: { clerkId } });
+  if (!user || user.role !== "ADMIN") redirect("/dashboard");
+
   return (
     <div className="flex min-h-screen bg-slate-950">
       {/* Sidebar */}

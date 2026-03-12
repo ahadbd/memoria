@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { RotateCcw, Keyboard } from "lucide-react";
 
 interface Flashcard {
   id: string;
@@ -13,118 +12,102 @@ interface Flashcard {
 
 interface StudyEngineProps {
   cards: Flashcard[];
+  currentIndex: number;
+  isFlipped: boolean;
+  onFlip: () => void;
 }
 
-export default function StudyEngine({ cards }: StudyEngineProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
+export default function StudyEngine({ cards, currentIndex, isFlipped, onFlip }: StudyEngineProps) {
   const [direction, setDirection] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(currentIndex);
 
   const currentCard = cards[currentIndex];
 
-  const handleNext = () => {
-    if (currentIndex < cards.length - 1) {
-      setDirection(1);
-      setIsFlipped(false);
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setDirection(-1);
-      setIsFlipped(false);
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+  useEffect(() => {
+    if (currentIndex > prevIndex) setDirection(1);
+    else if (currentIndex < prevIndex) setDirection(-1);
+    setPrevIndex(currentIndex);
+  }, [currentIndex, prevIndex]);
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-12 max-w-2xl mx-auto py-12">
-      <div className="w-full flex justify-between items-center px-4">
-        <span className="text-sm font-medium text-slate-500">
-          Card {currentIndex + 1} of {cards.length}
+    <div className="flex flex-col items-center justify-center space-y-8 max-w-2xl mx-auto">
+      {/* Progress */}
+      <div className="w-full flex justify-between items-center px-2">
+        <span className="text-sm font-semibold text-slate-400">
+          Card <span className="text-white">{currentIndex + 1}</span> of <span className="text-white">{cards.length}</span>
         </span>
-        <div className="h-1.5 w-48 bg-slate-800 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-indigo-500 transition-all duration-300" 
-            style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
-          />
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
+            <Keyboard size={12} />
+            <span>Space to flip · 1-4 to rate</span>
+          </div>
+          <div className="h-2 w-48 bg-slate-800 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
+              initial={false}
+              animate={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="relative w-full aspect-[16/10] perspective-1000">
+      {/* Card */}
+      <div className="relative w-full aspect-[16/10]" style={{ perspective: "1200px" }}>
+        {/* Glow Effect */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl blur-3xl opacity-20 -z-10"
+          animate={{
+            background: isFlipped
+              ? "radial-gradient(ellipse at center, rgb(99 102 241 / 0.4), transparent 70%)"
+              : "radial-gradient(ellipse at center, rgb(139 92 246 / 0.3), transparent 70%)",
+          }}
+          transition={{ duration: 0.6 }}
+        />
+
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentIndex}
             custom={direction}
-            initial={{ opacity: 0, x: direction * 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -direction * 100 }}
+            initial={{ opacity: 0, x: direction * 80, scale: 0.96 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -direction * 80, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="w-full h-full cursor-pointer preserve-3d"
-            onClick={() => setIsFlipped(!isFlipped)}
+            className="w-full h-full cursor-pointer"
+            onClick={onFlip}
+            style={{ transformStyle: "preserve-3d" }}
           >
             <motion.div
               animate={{ rotateY: isFlipped ? 180 : 0 }}
               transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
-              className="relative w-full h-full w-full h-full preserve-3d"
+              className="relative w-full h-full"
+              style={{ transformStyle: "preserve-3d" }}
             >
-              {/* Front Side */}
-              <div className="absolute inset-0 w-full h-full backface-hidden rounded-3xl border border-slate-800 bg-slate-900 flex items-center justify-center p-12 text-center text-2xl font-semibold shadow-2xl overflow-y-auto">
-                {currentCard.front}
+              {/* Front */}
+              <div
+                className="absolute inset-0 w-full h-full rounded-3xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-900/80 flex items-center justify-center p-12 text-center text-2xl font-semibold shadow-2xl shadow-black/30 overflow-y-auto"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <div className="space-y-4">
+                  <p>{currentCard.front}</p>
+                </div>
                 <div className="absolute bottom-6 text-xs text-slate-500 font-medium uppercase tracking-widest flex items-center gap-2">
                   <RotateCcw size={12} className="animate-pulse" />
-                  Click to flip
+                  Click or press Space to flip
                 </div>
               </div>
 
-              {/* Back Side */}
-              <div 
-                className="absolute inset-0 w-full h-full backface-hidden rounded-3xl border border-indigo-500/30 bg-indigo-950/20 flex items-center justify-center p-12 text-center text-xl shadow-2xl rotate-y-180 overflow-y-auto"
+              {/* Back */}
+              <div
+                className="absolute inset-0 w-full h-full rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900 flex items-center justify-center p-12 text-center text-xl shadow-2xl shadow-indigo-500/10 overflow-y-auto"
+                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                {currentCard.back}
+                <p>{currentCard.back}</p>
               </div>
             </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>
-
-      <div className="flex items-center gap-8">
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="rounded-full h-14 w-14" 
-          onClick={handlePrev}
-          disabled={currentIndex === 0}
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="rounded-full h-14 w-14 border-indigo-500/50 text-indigo-400"
-          onClick={() => setIsFlipped(!isFlipped)}
-        >
-          <RotateCcw className="h-6 w-6" />
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="rounded-full h-14 w-14" 
-          onClick={handleNext}
-          disabled={currentIndex === cards.length - 1}
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button>
-      </div>
-
-      {/* Tailwind config requires perspective and preserve-3d utilities if not built-in */}
-      <style jsx global>{`
-        .perspective-1000 { perspective: 1000px; }
-        .preserve-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-      `}</style>
     </div>
   );
 }

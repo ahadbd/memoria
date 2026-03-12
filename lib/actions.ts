@@ -1,3 +1,5 @@
+"use server";
+
 import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
@@ -61,6 +63,28 @@ export async function updateStreak(userId: string) {
   }
 }
 
+export async function deleteDeck(deckId: string) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorized");
+
+  const dbUser = await prisma.user.findUnique({ where: { clerkId } });
+  if (!dbUser) throw new Error("User not found");
+
+  // Verify deck ownership
+  const deck = await prisma.deck.findUnique({ where: { id: deckId } });
+  if (!deck || deck.userId !== dbUser.id) throw new Error("Deck not found");
+
+  // Cascade delete: reviews → cards → deck
+  await prisma.$transaction(async (tx) => {
+    await tx.review.deleteMany({ where: { card: { deckId } } });
+    await tx.card.deleteMany({ where: { deckId } });
+    await tx.deck.delete({ where: { id: deckId } });
+  });
+
+  return { success: true };
+}
+
+
 export async function createDeck(title: string, description: string, cards: { front: string, back: string }[]) {
   const { userId: clerkId } = await auth();
   if (!clerkId) throw new Error("Unauthorized");
@@ -87,7 +111,7 @@ export async function createDeck(title: string, description: string, cards: { fr
   });
 }
 
-export async function saveReviewResults(results: { cardId: string, rating: number, nextState: any }[]) {
+export async function saveReviewResults(results: { cardId: string, rating: number, nextState: { stability: number; difficulty: number; elapsedDays: number; scheduledDays: number; reps: number; lapses: number; state: number; lastReview: Date; nextReview: Date } }[]) {
   const { userId: clerkId } = await auth();
   if (!clerkId) throw new Error("Unauthorized");
 
@@ -123,4 +147,51 @@ export async function saveReviewResults(results: { cardId: string, rating: numbe
     // Update streak if it's been a new day
     await updateStreak(dbUser.id);
   });
+}
+
+// ── Admin Actions ──────────────────────────────────────────
+
+async function requireAdmin() {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorized");
+  const user = await prisma.user.findUnique({ where: { clerkId } });
+  if (!user || user.role !== "ADMIN") throw new Error("Forbidden");
+  return user;
+}
+
+export async function toggleSuspendUser(userId: string) {
+  await requireAdmin();
+  const target = await prisma.user.findUnique({ where: { id: userId } });
+  if (!target) throw new Error("User not found");
+  await prisma.user.update({ where: { id: userId }, data: { isSuspended: !target.isSuspended } });
+  return { success: true };
+}
+
+export async function toggleUserRole(userId: string) {
+  await requireAdmin();
+  const target = await prisma.user.findUnique({ where: { id: userId } });
+  if (!target) throw new Error("User not found");
+  await prisma.user.update({
+    where: { id: userId },
+    data: { role: target.role === "ADMIN" ? "STUDENT" : "ADMIN" }
+  });
+  return { success: true };
+}
+
+export async function adminDeleteDeck(deckId: string) {
+  await requireAdmin();
+  await prisma.$transaction(async (tx) => {
+    await tx.review.deleteMany({ where: { card: { deckId } } });
+    await tx.card.deleteMany({ where: { deckId } });
+    await tx.deck.delete({ where: { id: deckId } });
+  });
+  return { success: true };
+}
+
+export async function adminToggleDeckVisibility(deckId: string) {
+  await requireAdmin();
+  const deck = await prisma.deck.findUnique({ where: { id: deckId } });
+  if (!deck) throw new Error("Deck not found");
+  await prisma.deck.update({ where: { id: deckId }, data: { isPublic: !deck.isPublic } });
+  return { success: true };
 }

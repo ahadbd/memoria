@@ -19,7 +19,7 @@ export async function generateFlashcards(content: string) {
   const text = response.text();
   
   // Basic cleanup of potential markdown code blocks
-  const jsonMatch = text.match(/\[.*\]/s);
+  const jsonMatch = text.match(/\[[\s\S]*\]/);
   if (jsonMatch) {
     return JSON.parse(jsonMatch[0]);
   }

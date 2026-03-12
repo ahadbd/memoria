@@ -1,4 +1,4 @@
-import { FSRS, Rating, Card, createEmptyCard } from "ts-fsrs";
+import { FSRS, Rating } from "ts-fsrs";
 
 export const fsrs = new FSRS({
   request_retention: 0.9,

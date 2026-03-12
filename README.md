@@ -42,7 +42,11 @@ To build the most efficient learning engine on the planet, removing the friction
 - **Analytics**: Deep-dive into your retention rates and memory stability.
 
 ### 4. Admin Command Center
-- **Total Control**: High-level dashboard for managing users, monitoring AI token usage, and overseeing system health.
+- **Overview Dashboard**: Real-time stats, review charts, top decks, and recent activity feed.
+- **User Management**: Promote/demote roles, suspend/unsuspend users, search and filter.
+- **Study Sets**: Browse, search, and delete any deck across the platform.
+- **Moderation**: Review suspended users and moderate public decks — toggle visibility or remove content.
+- **Settings**: Platform overview, database health visualizations, and security status indicators.
 
 ## 🛠 Tech Stack
 

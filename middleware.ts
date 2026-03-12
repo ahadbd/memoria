@@ -1,20 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)", "/api/webhooks(.*)"]);
-const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
     await auth.protect();
-  }
-
-  if (isAdminRoute(request)) {
-    const { sessionClaims } = await auth();
-    // Assuming metadata contains role
-    if (sessionClaims?.metadata?.role !== "admin") {
-      const url = new URL("/", request.url);
-      return Response.redirect(url);
-    }
   }
 });
 

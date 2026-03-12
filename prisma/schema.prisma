@@ -38,6 +38,8 @@ model Deck {
   isPublic    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
 }
 
 model Card {
@@ -61,6 +63,8 @@ model Card {
   reviews     Review[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  @@index([deckId])
 }
 
 model Review {
@@ -71,4 +75,7 @@ model Review {
   user      User     @relation(fields: [userId], references: [id])
   rating    Int      // 1: Again, 2: Hard, 3: Good, 4: Easy
   reviewDate DateTime @default(now())
+  
+  @@index([cardId])
+  @@index([userId])
 }
